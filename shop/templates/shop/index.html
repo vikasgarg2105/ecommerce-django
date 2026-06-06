@@ -1,0 +1,48 @@
+{% extends 'shop/base.html' %}
+{% block title %}
+  Home
+{% endblock %}
+
+{% block body %}
+  <section class="featured-products">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2>FEATURED PRODUCTS</h2>
+          <p>Do not miss the current offers until the end of month.</p>
+        </div>
+        <a href="#" class="view-all-btn">View All →</a>
+      </div>
+      <div class="products-wrapper">
+        <button class="nav-btn prev">&#10094;</button>
+        <div class="products-grid">
+          {% if products %}
+            {% for product in products %}
+              <div class="product-card">
+                <span class="discount-badge">41%</span>
+                <div class="product-image">
+                  {% if product.product_image %}
+                    <img src="{{ product.product_image.url }}" alt="Product" />
+                  {% endif %}
+                </div>
+                <h3>{{ product.product_name }}</h3>
+                <span class="stock">IN STOCK</span>
+                <div class="rating">
+                  ★★★★☆ <span>(1)</span>
+                </div>
+                <div class="price-box">
+                  <span class="old-price">Rs {{ product.price }}</span>
+                  <span class="price">Rs {{ product.price }}</span>
+                </div>
+                <button class="cart-btn">Add to Cart</button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <button class="nav-btn next">&#10095;</button>
+      </div>
+    </div>
+  </section>
+
+  {{ product.category }}
+{% endblock %}

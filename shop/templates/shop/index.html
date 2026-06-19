@@ -2,47 +2,82 @@
 {% block title %}
   Home
 {% endblock %}
-
+{% block css %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+{% endblock %}
 {% block body %}
+{% if products %}
+{% for category_products in products %}
   <section class="featured-products">
     <div class="container">
       <div class="section-header">
-        <div>
-          <h2>FEATURED PRODUCTS</h2>
+        <div class="header-info">
+          <h2>{{ category_products.category }}</h2>
           <p>Do not miss the current offers until the end of month.</p>
         </div>
         <a href="#" class="view-all-btn">View All →</a>
       </div>
+      
       <div class="products-wrapper">
-        <button class="nav-btn prev">&#10094;</button>
-        <div class="products-grid">
-          {% if products %}
-            {% for product in products %}
-              <div class="product-card">
-                <span class="discount-badge">41%</span>
-                <div class="product-image">
-                  {% if product.product_image %}
-                    <img src="{{ product.product_image.url }}" alt="Product" />
-                  {% endif %}
+        <div class="swiper mySwiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-button-prev"></div>
+              {% for product in category_products.products %}
+                <div class="product-card swiper-slide">
+                  <span class="discount-badge">41%</span>
+                  <div class="product-image">
+                    {% if product.product_image %}
+                      <img src="{{ product.product_image.url }}" alt="Product" />
+                    {% endif %}
+                  </div>
+                  <div class="product-info">
+                    <h3 id="product-name-{{product.product_id}}"><a href="{% url 'product_details' product.product_id %}">{{ product.product_name }}</a></h3>
+                    <span class="stock">IN STOCK</span>
+                    <div class="rating">
+                      ★★★★☆ <span>1</span>
+                    </div>
+                    <div class="price-box">
+                      <span class="old-price">₹ {{ product.price }}</span>
+                      <span class="price">₹ {{ product.price }}</span>
+                    </div>
+                    <div class="cart-btn-container" id="cartBtn{{product.product_id}}" data-product-id={{product.product_id}}>
+                      <button class="cart-btn" id="{{product.product_id}}">Add to Cart</button>
+                    </div>
+                  </div>
                 </div>
-                <h3>{{ product.product_name }}</h3>
-                <span class="stock">IN STOCK</span>
-                <div class="rating">
-                  ★★★★☆ <span>(1)</span>
-                </div>
-                <div class="price-box">
-                  <span class="old-price">Rs {{ product.price }}</span>
-                  <span class="price">Rs {{ product.price }}</span>
-                </div>
-                <button class="cart-btn">Add to Cart</button>
-              </div>
-            {% endfor %}
-          {% endif %}
+              {% endfor %}
+            <div class="swiper-button-next"></div>
+          </div>
         </div>
-        <button class="nav-btn next">&#10095;</button>
       </div>
     </div>
   </section>
+  {% endfor %}
+  {% endif %}
+{% endblock %}
 
-  {{ product.category }}
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+
+  <!-- Initialize Swiper -->
+  <script>
+    var swiper = new Swiper('.mySwiper', {
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+      },
+      spaceBetween: 0,
+      breakpoints: {
+        640: {
+          slidesPerView: 2
+        },
+        768: {
+          slidesPerView: 4
+        },
+        1024: {
+          slidesPerView: 5
+        }
+      }
+    })
+  </script>
 {% endblock %}

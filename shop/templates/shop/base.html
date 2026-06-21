@@ -47,7 +47,7 @@
               <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
             <div class="cart-box position-relative">
-              <button type="button" class="cart-item-btn ms-2"><img src="{% static 'shop/assets/images/cart.svg' %}" class="img-fluid" alt="cart" /><span id="cartNumber">0</span></button>
+              <button type="button" class="cart-item-btn ms-2"><img src="{% static 'shop/assets/images/cart.svg' %}" class="img-fluid" alt="cart" /><span id="cartNumber">{{ cart_count }}</span></button>
             <div class="cart-container">
 
             </div>
@@ -62,7 +62,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
     <script>
-      if (localStorage.getItem('cart') == null) {
+      {% comment %} if (localStorage.getItem('cart') == null) {
         var cart = {}
       } else {
         cart = JSON.parse(localStorage.getItem('cart'))
@@ -80,16 +80,11 @@
       })
 
       function updateCart(cart){
-        var sum = 0
         for(item in cart){
-            sum = sum + cart[item]
             document.getElementById("cartBtn" + item).innerHTML = `<button class="decrement-btn" id="decrementBtn${item}">-</button><span id="itemNumber${item}">` + cart[item] + `</span><button class="increment-btn" id="incrementBtn${item}">+</button>`
         }
-        localStorage.setItem('cart', JSON.stringify(cart))
-        document.getElementById('cartNumber').innerHTML = sum
       }
       function addCartBtn(id){
-          delete cart[id]
           updateCart(cart)
           
           document.getElementById("cartBtn" + id).innerHTML = `<button class="cart-btn" id="${id}">Add to Cart</button>`
@@ -110,7 +105,7 @@
         cart[id] = cart[id] + 1
         document.getElementById("itemNumber" + id).innerHTML = cart[id]
         updateCart(cart)
-      })
+      }) {% endcomment %}
 
       $(document).ready(function(){
 
@@ -128,6 +123,91 @@
           });
 
       });
+
+      $(".cart-btn-container").on("click", ".cart-btn",function(){
+        let productId = this.id
+        fetch("/shop/add-to-cart/",{
+          method : "POST",
+          headers: {
+            "Content-Type" : "application/json",
+            "X-CSRFToken" : "{{ csrf_token }}"
+          },
+          body: JSON.stringify({
+            product_id : productId
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          $("#cartBtn" + productId).html(`
+            <button class="decrement-btn" id="decrementBtn${productId}">-</button>
+            <span id="itemNumber${productId}">${data.quantity}</span>
+            <button class="increment-btn" id="incrementBtn${productId}">+</button>
+          `)
+          $("#cartNumber").text(data.cart_count)
+        })
+      })
+
+      $(".cart-btn-container").on("click", ".increment-btn", function(){
+        let productId = this.id.replace("incrementBtn", "")
+
+        fetch("/shop/update-cart/", {
+          method : "POST",
+          headers : {
+            "Content-Type" : "application/json",
+            "X-CSRFToken" : "{{ csrf_token }}"
+          },
+
+          body: JSON.stringify({
+            product_id : productId,
+            action: "increase"
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          $("#itemNumber" + productId).text(data.quantity)
+        $("#cartNumber").text(data.cart_count)
+        })
+      })
+
+
+      $(".cart-btn-container").on("click", ".decrement-btn", function(){
+
+    let productId = this.id.replace("decrementBtn", "")
+
+    fetch("/shop/update-cart/", {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+
+        body: JSON.stringify({
+            product_id: productId,
+            action: "decrease"
+        })
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        if(data.deleted){
+
+            $("#cartBtn" + productId).html(`
+              <button class="cart-btn" id="${productId}">
+                   Add to Cart
+              </button>
+            `)
+
+        } else {
+
+            $("#itemNumber" + productId).text(data.quantity)
+        }
+
+        $("#cartNumber").text(data.cart_count)
+    })
+})
     </script>
     {% block js %}
     {% endblock %}

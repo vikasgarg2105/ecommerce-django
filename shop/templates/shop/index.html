@@ -41,7 +41,13 @@
                       <span class="price">₹ {{ product.price }}</span>
                     </div>
                     <div class="cart-btn-container" id="cartBtn{{product.product_id}}" data-product-id={{product.product_id}}>
+                      {% if product.cart_quantity > 0 %}
+                          <button class="decrement-btn" id="decrementBtn{{ product.id }}">-</button>
+                          <span id="itemNumber{{ product.id }}">{{ product.cart_quantity }}</span>
+                          <button class="increment-btn" id="incrementBtn{{ product.id }}">+</button>
+                      {% else %}
                       <button class="cart-btn" id="{{product.product_id}}">Add to Cart</button>
+                      {% endif %}
                     </div>
                   </div>
                 </div>

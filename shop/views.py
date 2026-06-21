@@ -1,21 +1,31 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+import json
 
 from .models import Product, Contact
 
 
 # Create your views here.
 def shophome(request):
-    products = Product.objects.all()
+    cart = request.session.get("cart", {})
 
     allProduct = []
     catProducts = Product.objects.values('category', 'product_id')
     categories = {item['category'] for item in catProducts}
     for category in categories:
-        product = Product.objects.filter(category = category)
+        products = Product.objects.filter(category = category)
+
+        for product in products:
+            product_id = str(product.product_id)
+
+            if product_id in cart:
+                product.cart_quantity = cart[product_id]
+            else:
+                product.cart_quantity = 0
+        
         allProduct.append({
         'category': category,
-        'products': product
+        'products': products
     })
 
     print(allProduct)
@@ -36,6 +46,54 @@ def contact(request):
         contact_details.save()
         
     return render(request, 'shop/contact.html')
+
+def add_to_cart(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        product_id = str(data.get("product_id"))
+
+        cart = request.session.get("cart", {})
+
+        if(product_id in cart):
+            cart[product_id] += 1
+        else:
+            cart[product_id] = 1
+
+        request.session["cart"] = cart
+
+        total_items = sum(cart.values())
+        return JsonResponse({
+            "status" : "Success",
+            "quantity": cart[product_id],
+            "cart_count" : total_items
+        })
+
+def update_cart(request):
+    data = json.loads(request.body)
+    
+    product_id = str(data["product_id"])
+    action = data["action"]
+
+    cart = request.session.get("cart", {})
+
+    deleted = False
+
+    if action == "increase":
+        cart[product_id] += 1
+    elif action == "decrease":
+        if cart[product_id] > 1:
+            cart[product_id] -= 1
+        else:
+            del cart[product_id]
+            deleted = True
+
+    request.session["cart"] = cart
+
+    return JsonResponse({
+        "quantity": cart.get(product_id, 0),
+        "deleted": deleted,
+        "cart_count": sum(cart.values())
+    })
 
 def tracking(request):
     return render(request, 'shop/tracker.html')

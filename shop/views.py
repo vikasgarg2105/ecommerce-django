@@ -1,6 +1,8 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 import json
+from .utils import get_cart_products
 
 from .models import Product, Contact
 
@@ -61,9 +63,16 @@ def add_to_cart(request):
 
         request.session["cart"] = cart
 
+        cart_products = get_cart_products(cart)
+
+        cart_html = render_to_string(
+            "shop/components/cart-items.html",{"cart_products" : cart_products}
+        )
+
         total_items = sum(cart.values())
         return JsonResponse({
             "status" : "Success",
+            "cart_html" : cart_html,
             "quantity": cart[product_id],
             "cart_count" : total_items
         })
@@ -89,10 +98,16 @@ def update_cart(request):
 
     request.session["cart"] = cart
 
+    cart_products = get_cart_products(cart)
+    cart_html = render_to_string(
+        "shop/components/cart-items.html", {"cart_products" : cart_products}
+    )
+
     return JsonResponse({
         "quantity": cart.get(product_id, 0),
         "deleted": deleted,
-        "cart_count": sum(cart.values())
+        "cart_count": sum(cart.values()),
+        "cart_html": cart_html
     })
 
 def tracking(request):

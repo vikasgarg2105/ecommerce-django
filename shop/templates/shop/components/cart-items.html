@@ -1,0 +1,12 @@
+{% if cart_products %}
+    {% for product in cart_products %}
+        <div class="cart-product">
+            <img src="{{product.product_image.url}}" class="img-fluid" alt="" width="50" />
+            <div>
+                <h5>{{product.product_name}}</h5>
+                <p>₹ {{ product.price }}</p>
+                <span>Qty: {{product.quantity}}</span>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

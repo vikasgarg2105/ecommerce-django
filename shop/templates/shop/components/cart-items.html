@@ -1,12 +1,22 @@
-{% if cart_products %}
+<div class="cart-products">
     {% for product in cart_products %}
         <div class="cart-product">
-            <img src="{{product.product_image.url}}" class="img-fluid" alt="" width="50" />
-            <div>
-                <h5>{{product.product_name}}</h5>
-                <p>₹ {{ product.price }}</p>
-                <span>Qty: {{product.quantity}}</span>
+            <div class="cart-img">
+                <img src="{{product.product_image.url}}" class="img-fluid" alt="" width="80" />
+            </div>
+            <div class="cart-product-info">
+                <h5><a href="{% url 'product_details' product.product_id %}">{{product.product_name}}</a></h5>
+                <div class="d-flex align-items-center gap-2">
+                    <p>₹ {{ product.price }}</p>
+                    <span>Qty: {{product.quantity}}</span>
+                </div>
             </div>
         </div>
+    {% empty %}
+        <p class="no-item-text">No item added in cart</p>
     {% endfor %}
-{% endif %}
+</div>
+<div class="cart-footer">
+    <a href="{% url 'cart' %}" class="view-cart-btn">View Cart</a>
+    <a href="{% url 'checkout' %}" class="checkout-btn">Checkout</a>
+</div>

@@ -1,0 +1,124 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}Cart{% endblock %}
+{% block body %}
+<div class="cart py-5">
+    <div class="container">
+        <div class="row">
+            {% if cart_products %}
+            <div class="col-lg-8">
+                <div class="cart-list">
+                    <div class="table-responsiveness">
+                        <table class="table">
+                            <thead>
+                                <th></th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                
+                                {% for cart in cart_products %}
+                                <tr id="row{{ cart.product_id }}">
+                                    <td><img src={{cart.product_image.url}} alt="" class="img-fluid" width="80" height="80"></td>
+                                    <td><p class="product-title">{{cart.product_name}}</p></td>
+                                    <td>₹{{cart.price}}</td>
+                                    <td>
+                                        <button class="decrement-btn" data-id="{{ cart.product_id }}">-</button>
+                                        <span class="product-qty-count" id="itemNumber{{ cart.product_id }}">{{cart.quantity}}</span>
+                                        <button class="increment-btn" data-id="{{ cart.product_id }}">+</button>
+                                    </td>
+                                    <td>
+                                        <div id="subtotal{{ cart.product_id }}">
+                                            ₹{{cart.subtotal}}
+                                        </div>
+                                    </td>
+                                    <td><button class="close-btn cart-remove" data-id="{{ cart.product_id }}"><i class="bi bi-trash"></i></button></td>
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="{% url 'shopHome' %}" class="shopping-btn">
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart-total sticky-top">
+                    <h2>Cart Summary</h2>
+                    <p>Total Items: {{ cart_count }}</p>
+                    <p>Shipping: Free</p>
+                    <p>Tax: ₹0</p>
+                    <p>Total: ₹{{total_price}}</p>
+                    <a href="{% url 'checkout' %}" class="checkout-btn">Proceed to Checkout</a>
+                </div>
+            </div>
+            {% else %}
+                <div class="d-flex justify-content-center flex-column align-items-center">
+                    <h2 class="mb-3">🛒 Your cart is empty</h2>
+                    <p class="mb-4">Looks like you haven't added anything yet.</p>
+                    <a href="{% url 'shopHome' %}" class="shopping-btn">Start Shopping</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.querySelectorAll(".increment-btn").forEach(button => {
+            button.addEventListener("click", function(){
+                let productId = this.dataset.id
+
+                updateCart(productId, "increase")
+            })
+        })
+
+        document.querySelectorAll(".decrement-btn").forEach(button => {
+            button.addEventListener("click", function(){
+                let productId = this.dataset.id
+
+                updateCart(productId, "decrease")
+            })
+        })
+
+        document.querySelectorAll(".cart-remove").forEach(button => {
+            button.addEventListener("click", function(){
+                let productId = this.dataset.id
+                updateCart(productId, "remove")
+            })
+        })
+
+        function updateCart(productId, action){
+            fetch("/shop/update-cart/", {
+                method : "POST",
+                headers : {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body : JSON.stringify({
+                    product_id: productId,
+                    action: action
+                })
+            }).then(response => response.json())
+            .then(data =>{
+                if(data.is_empty){
+                    location.reload();
+                    return;
+                }
+                if (data.deleted){
+                    $("#row" + productId).remove();
+                }else{
+                    location.reload();
+                }
+                $("#cartNumber").text(data.cart_count);
+            })
+        }
+    </script>
+{% endblock %}

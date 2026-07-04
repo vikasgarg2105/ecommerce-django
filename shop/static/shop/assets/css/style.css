@@ -1,8 +1,11 @@
 :root {
-    --primary-color: #e6003d;
+    --primary-color: #2bbef9;
     --primary-font: "Inter", sans-serif;
     --secondary-font: "Dosis", sans-serif;
     --white: #ffffff;
+    --black: #000000;
+    --muted-text: #5b5b62;
+    --red: #ee0000;
 }
 
 body {
@@ -11,6 +14,10 @@ body {
 
 section {
     padding: 40px 0;
+}
+
+main {
+    margin-top: 72px;
 }
 
 .section-header {
@@ -253,14 +260,12 @@ section {
 
 .cart-container {
     box-shadow: 0px 5px 10px rgba(62, 68, 90, 0.1);
-    min-width: 18rem;
-    min-height: 18rem;
+    width: 24rem;
     position: absolute;
     top: 56px;
     right: 0px;
     z-index: 9999;
     background-color: white;
-    overflow-y: auto;
     border: 1px solid #edeef5;
     border-radius: 8px;
     opacity: 0;
@@ -311,6 +316,291 @@ section {
     justify-content: center;
     top: -8px;
     right: -8px;
+}
+
+.billing-details h2,
+.order-box h2,
+.cart-total h2 {
+    font-family: var(--secondary-font);
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-bottom: 1px solid #efefef;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+}
+
+.billing-details label {
+    font-size: .8125rem;
+    color: #202435;
+}
+
+.divider {
+    border-bottom: 1px solid #efefef;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.billing-details input,
+.billing-details select,
+.billing-details input:focus,
+.billing-details select:focus {
+    font-size: .9375rem;
+    color: #202435;
+    background-color: #f3f4f7;
+    height: 2.75rem;
+    border: 0px solid;
+}
+
+.billing-details textarea:focus,
+.billing-details textarea {
+    font-size: .9375rem;
+    color: #202435;
+    background-color: #f3f4f7;
+    border: 0px solid;
+    resize: none;
+}
+
+.close-btn {
+    background-color: transparent;
+    border: 0px solid transparent;
+    width: 28px;
+    height: 28px;
+    color: red;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.cart-product {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #80808040;
+    padding: 8px;
+}
+
+.no-item-text {
+    color: var(--muted-text);
+    text-align: center;
+}
+
+#cartContainer .no-item-text {
+    height: 17rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-container .cart-products {
+    height: 18.15rem;
+    overflow-y: auto;
+}
+
+.cart-container .cart-footer .view-cart-btn {
+    background-color: var(--white);
+    color: var(--primary-color);
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 44px;
+    padding: 8px;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    text-decoration: none;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.cart-container .cart-footer .checkout-btn {
+    background-color: var(--red);
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 44px;
+    padding: 8px;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 0px solid black;
+    color: var(--white);
+    text-decoration: none;
+    text-align: center;
+}
+
+.cart-container .cart-footer {
+    padding: 16px;
+}
+
+.cart-footer .cart-product h5,
+.cart-product h5 a {
+    color: var(--black);
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.cart-product p {
+    margin-bottom: 0px;
+    color: var(--black);
+    font-size: 0.875rem;
+}
+
+.cart-product .cart-img {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    margin-right: 8px;
+}
+
+.cart-product .cart-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cart-product span {
+    margin-bottom: 0px;
+    color: var(--black);
+    font-size: 0.875rem;
+}
+
+table thead th {
+    font-size: .75rem;
+    font-weight: 600;
+    color: #71778e !important;
+    text-transform: uppercase;
+}
+
+table tbody tr td {
+    font-size: .875rem;
+    font-weight: 400;
+    color: #212529 !important;
+    vertical-align: middle;
+}
+
+.cart span.total {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.cart .increment-btn,
+.cart .decrement-btn {
+    background-color: #edeef5;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    border: 0px solid transparent;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.product-qty-count {
+    min-width: 20px;
+    display: inline-flex;
+    width: 30px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-list .product-title {
+    max-width: 300px;
+}
+
+.checkout-btn {
+    background-color: #0e0080;
+    display: inline-block;
+    text-decoration: none;
+    color: var(--white);
+    width: 100%;
+    text-align: center;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.shopping-btn {
+    background-color: #0e0080;
+    display: inline-block;
+    text-decoration: none;
+    color: var(--white);
+    text-align: center;
+    padding: 8px 24px;
+    border-radius: 8px;
+}
+
+.cart-total {
+    border: 1px solid #e4e5ee;
+    padding: 20px;
+}
+
+.order-box {
+    border: 2px solid #233a95;
+    border-radius: 8px;
+    padding: 30px;
+}
+
+.order-box .product-item p {
+    font-size: .8125rem;
+    font-family: var(--primary-font);
+    max-width: 50%;
+    width: 50%;
+}
+
+.order-box .product-item,
+.order-box .total,
+.order-box .shipping,
+.order-box .tax,
+.order-box .subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-box .total p,
+.order-box .shipping p,
+.order-box .tax p,
+.order-box .subtotal p {
+    font-size: .8125rem;
+    font-weight: 600;
+    color: #71778e;
+}
+
+.order-box .shipping span,
+.order-box .tax span,
+.order-box .subtotal span {
+    font-size: .875rem;
+}
+
+.order-box .total span {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.payment-method label {
+    font-size: .8125rem;
+}
+
+.agreement label {
+    font-size: .75rem;
+}
+
+.place-order-btn button {
+    background-color: #ed174a;
+    color: white;
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 0px solid;
+}
+
+.order-box .total {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.order-box .product-item span {
+    font-size: .9375rem;
+    font-family: var(--primary-font);
 }
 
 @media(max-width:768px) {

@@ -10,6 +10,7 @@
       {% endblock %}
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="{% static 'shop/assets/css/style.css' %}" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,7 +19,7 @@
     {% endblock %}
   </head>
   <body>
-    <nav class="navbar bg-dark navbar-expand-lg" data-bs-theme="dark">
+    <nav class="navbar bg-dark navbar-expand-lg fixed-top" data-bs-theme="dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'shopHome' %}">CARTStore.com</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -49,16 +50,17 @@
             <div class="cart-box position-relative">
               <button type="button" class="cart-item-btn ms-2"><img src="{% static 'shop/assets/images/cart.svg' %}" class="img-fluid" alt="cart" /><span id="cartNumber">{{ cart_count }}</span></button>
               <div class="cart-container" id="cartContainer">
-
               </div>
             </div>
           </div>
         </div>
       </div>
     </nav>
-    {% block body %}
+    <main>
+      {% block body %}
 
-    {% endblock %}
+      {% endblock %}
+    </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
     <script>
@@ -67,7 +69,18 @@
 
           $(".cart-item-btn").click(function(e){
               e.stopPropagation();
-              $(".cart-container").toggleClass("active");
+
+              if($(".cart-container").hasClass("active")){
+                 $(".cart-container").removeClass("active");
+                return;
+              }
+
+              fetch("/shop/get-cart/")
+              .then(response=>response.json())
+              .then(data=>{
+                $(".cart-container").toggleClass("active");
+                $("#cartContainer").html(data.cart_html)
+              })
           });
 
           $(".cart-container").click(function(e){
@@ -94,7 +107,6 @@
         })
         .then(response => response.json())
         .then(data => {
-          console.log(data, "data")
           $("#cartBtn" + productId).html(`
             <button class="decrement-btn" id="decrementBtn${productId}">-</button>
             <span id="itemNumber${productId}">${data.quantity}</span>

@@ -1,5 +1,5 @@
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 import json
 from .utils import get_cart_products
@@ -161,20 +161,74 @@ def cart(request):
 def checkout(request):
     cart = request.session.get("cart", {})
 
-    if request.method == "POST":
-        name = request.POST.get("name")
-        email = request.POST.get("email")
-        phone = request.POST.get("phone")
-        address1 = request.POST.get("address1")
-        address2 = request.POST.get("address2")
-        city = request.POST.get("city")
-        state = request.POST.get("state")
-        pincode = request.POST.get("pincode")
+    if not cart:
+        return redirect("cart")
 
-        total = 0
+    cart_products = get_cart_products(cart)
+
+    total_price = 0
+    subtotal = sum(product.subtotal for product in cart_products)
+    tax = 0
+    shipping = 0
+    total_price = subtotal + shipping + tax
+
+
+    if request.method == "POST":
+        firstname = request.POST.get("first_name", "").strip()
+        lastname = request.POST.get("last_name", "").strip()
+        email = request.POST.get("email", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        address1 = request.POST.get("address1", "").strip()
+        address2 = request.POST.get("address2", "").strip()
+        city = request.POST.get("city", "").strip()
+        state = request.POST.get("state", "").strip()
+        pincode = request.POST.get("pincode", "").strip()
+        payment_method = request.POST.get("payment_method", "")
+        accept = request.POST.get("accept", "")
+
+        errors = {}
+        if not firstname:
+            errors["firstname"] = "First name is required"
+        if not lastname:
+            errors["lastname"] = "Last name is required"
+        if not email:
+            errors["email"] = "email is required"
+        elif "@" and "." not in email:
+            errors["email"] = "Invalid email."
+        if not phone:
+            errors["phone"] = "phone is required"
+        elif not phone.isdigit():
+            errors["phone"] = "Phone should contain only digits."
+        elif len(phone) != 10:
+            errors["phone"] = "Phone must be 10 digits."
+        if not address1:
+            errors["address1"] = "address1 is required"
+        if not city:
+            errors["city"] = "city is required"
+        if not state:
+            errors["state"] = "state is required"
+        if not pincode:
+            errors["pincode"] = "pincode is required"
+        if payment_method not in ["COD", "UPI"]:
+            errors["payment_method"] = "Select payment method."
+        if not accept:
+            errors["accept"] = "Please accept Terms & Conditions."
+
+        if errors:
+            context = {
+                "cart_products": cart_products,
+                "subtotal": subtotal,
+                "shipping": shipping,
+                "tax": tax,
+                "total_price": total_price,
+                "errors": errors,
+            }
+            return render(request, 'shop/checkout.html', context)
+
 
         order = Order.objects.create(
-            full_name = name,
+            firstname = firstname,
+            lastname = lastname,
             email = email,
             phone = phone,
             address1 = address1,
@@ -182,32 +236,67 @@ def checkout(request):
             city = city,
             state = state,
             pincode = pincode,
-            total_amount = 0
+            total_amount = 0,
+            payment_method=payment_method,
         )
 
-        for product_id, qty in cart.items():
-            product = Product.objects.get(product_id = product_id)
-            subtotal = (product.price * qty)
-            total += subtotal
+        for product in cart_products:
 
             OrderItem.objects.create(
                 order = order,
                 product = product,
-                quantity = qty,
+                quantity = product.quantity,
                 price = product.price
             )
 
-        order.total_amount = total
+        order.total_amount = total_price
         order.save()
 
         request.session["cart"] = {}
-        return redirect("success")
+        request.session["last_order_id"] = order.order_id
+        return redirect("order_success", order_id=order.order_id)
 
-    return render(request, 'shop/checkout.html')
+    context = {
+        "cart_products": cart_products,
+        "subtotal": subtotal,
+        "shipping": shipping,
+        "tax": tax,
+        "total_price": total_price,
+    }
 
-def order_success(request):
+    return render(request, 'shop/checkout.html', context)
+
+def order_success(request, order_id):
+
+    order_id = request.session.get("last_order_id")
+
+    if not order_id:
+        return redirect("shopHome")
+
+    order = get_object_or_404(Order, order_id=order_id)
+
+    context = {
+        "order": order
+    }
 
     return render(
         request,
-        "shop/success.html"
+        "shop/success.html",
+        context
     )
+
+def order_details(request, order_id):
+    last_order_id = request.session.get("last_order_id")
+
+    if last_order_id != order_id:
+        return redirect("shopHome")
+        
+    order = get_object_or_404(Order, order_id = order_id)
+    order_items = OrderItem.objects.filter(order = order)
+
+    context = {
+       "order": order,
+       "order_items": order_items
+    }
+
+    return render(request, "shop/order-details.html", context)

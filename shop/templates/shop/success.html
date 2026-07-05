@@ -1,0 +1,94 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+Order Success
+{% endblock %}
+
+{% block body %}
+
+<section class="order-success py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center p-5">
+                        <div class="mb-4">
+                            <i class="bi bi-check-circle-fill text-success"
+                               style="font-size:70px;"></i>
+                        </div>
+                        <h2 class="fw-bold mb-2">
+                            Thank You!
+                        </h2>
+                        <p class="text-muted mb-4">
+                            Your order has been placed successfully.
+                        </p>
+                        <hr>
+                        <div class="row text-start mt-4">
+                            <div class="col-md-6 mb-3">
+                                <strong>Order ID</strong>
+                                <p>#{{ order.order_id }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Order Date</strong>
+                                <p>{{ order.created_at|date:"d M Y, h:i A" }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Customer Name</strong>
+                                <p>{{ order.firstname }} {{ order.lastname }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Payment Method</strong>
+                                <p>{{ order.payment_method }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Order Status</strong>
+                                <span class="badge bg-warning text-dark">
+                                    {{ order.order_status }}
+                                </span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Total Amount</strong>
+                                <p>₹{{ order.total_amount }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="text-start">
+                            <h5 class="mb-3">
+                                Shipping Address
+                            </h5>
+                            <p class="mb-1">
+                                {{ order.firstname }} {{ order.lastname }}
+                            </p>
+                            <p class="mb-1">
+                                {{ order.address1 }}
+                            </p>
+                            {% if order.address2 %}
+                            <p class="mb-1">
+                                {{ order.address2 }}
+                            </p>
+                            {% endif %}
+                            <p class="mb-0">
+                                {{ order.city }},
+                                {{ order.state }} -
+                                {{ order.pincode }}
+                            </p>
+                        </div>
+                        <div class="mt-5">
+                            <a href="{% url 'shopHome' %}"
+                               class="btn btn-primary px-4">
+                                Continue Shopping
+                            </a>
+                            <a href="{% url 'order_details' order.order_id %}"
+                               class="btn btn-outline-primary px-4 ms-2">
+                                View Order Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

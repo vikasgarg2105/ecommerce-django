@@ -55,10 +55,17 @@ def add_to_cart(request):
 
         cart = request.session.get("cart", {})
 
-        if(product_id in cart):
-            cart[product_id] += 1
-        else:
-            cart[product_id] = 1
+        product = get_object_or_404(Product, product_id=product_id)
+
+        current_qty = cart.get(product_id, 0)
+
+        if current_qty >= product.stock:
+            return JsonResponse({
+                "status": "error",
+                "message": "Only {} item(s) available.".format(product.stock)
+            })
+
+        cart[product_id] = current_qty + 1
 
         request.session["cart"] = cart
 
@@ -85,8 +92,17 @@ def update_cart(request):
     cart = request.session.get("cart", {})
 
     deleted = False
+    product = get_object_or_404(Product, product_id=product_id)
 
     if action == "increase":
+        if cart[product_id] >= product.stock:
+            return JsonResponse(
+                {
+                    "status": "error",
+                    "message": f"Only {product.stock} item(s) available."
+                },
+                status=400
+            )
         cart[product_id] += 1
     elif action == "decrease":
         if cart[product_id] > 1:
@@ -109,6 +125,8 @@ def update_cart(request):
         total_price += product.subtotal
 
     return JsonResponse({
+        "status": "success",
+        "message": f"Product updated in cart.",
         "quantity": cart.get(product_id, 0),
         "deleted": deleted,
         "cart_count": sum(cart.values()),
@@ -214,6 +232,10 @@ def checkout(request):
         if not accept:
             errors["accept"] = "Please accept Terms & Conditions."
 
+        for product in cart_products:
+            if product.quantity > product.stock:
+                errors["stock"] = f"Only {product.stock} item(s) available for {product.product_name}."
+
         if errors:
             context = {
                 "cart_products": cart_products,
@@ -248,6 +270,9 @@ def checkout(request):
                 quantity = product.quantity,
                 price = product.price
             )
+
+            product.stock -= product.quantity
+            product.save()
 
         order.total_amount = total_price
         order.save()

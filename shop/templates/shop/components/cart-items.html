@@ -17,7 +17,7 @@
     {% endfor %}
 </div>
 <div class="cart-footer">
-    <a href="{% url 'cart' %}" class="view-cart-btn">View Cart</a>
+    <a href="{% url 'cart' %}" class="view-cart-btn{% if not cart_products %} mb-0{% endif %}">View Cart</a>
     {% if cart_products %}
     <a href="{% url 'checkout' %}" class="checkout-btn">Checkout</a>
     {% endif %}

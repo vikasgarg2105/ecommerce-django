@@ -7,9 +7,11 @@ class Product(models.Model):
     product_description = models.CharField(max_length=500)
     category = models.CharField(max_length=50, default="")
     sub_category = models.CharField(max_length=50, default="")
-    price = models.IntegerField(default=0)
+    mrp = models.IntegerField(default=0)
+    selling_price = models.IntegerField(default=0)
     publish_date = models.DateField()
     product_image = models.ImageField(upload_to="shop/product", default="")
+    stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.product_name

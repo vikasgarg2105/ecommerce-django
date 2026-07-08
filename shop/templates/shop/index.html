@@ -24,34 +24,47 @@
             <div class="swiper-wrapper">
               <div class="swiper-button-prev"></div>
                 {% for product in category_products.products %}
-                  <div class="product-card swiper-slide">
-                    <span class="discount-badge">41%</span>
+                <div class="swiper-slide">
+                  <div class="product-card {% if product.stock == 0 %} out-of-stock-product{% endif %}">
                     <div class="product-image">
+                      <span class="discount-badge">41%</span>
                       {% if product.product_image %}
                         <img src="{{ product.product_image.url }}" alt="Product" />
                       {% endif %}
                     </div>
                     <div class="product-info">
                       <h3 id="product-name-{{product.product_id}}"><a href="{% url 'product_details' product.product_id %}">{{ product.product_name }}</a></h3>
-                      <span class="stock">IN STOCK</span>
+                      {% if product.stock > 3 %}
+                        <span class="stock">Only {{product.stock}} Left</span>
+                      {% elif product.stock < 3 and product.stock > 0 %}
+                        <span class="stock orange-badge">🔥 Hurry! Only {{product.stock}} Left</span>
+                      {% elif product.stock == 0 %}
+                        <span class="badge bg-danger">Out of Stock</span>
+                      {% endif %}
+                      
                       <div class="rating">
-                        ★★★★☆ <span>1</span>
+                        ★★★★☆ <span>(1)</span>
                       </div>
                       <div class="price-box">
                         <span class="old-price">₹ {{ product.price }}</span>
                         <span class="price">₹ {{ product.price }}</span>
                       </div>
-                      <div class="cart-btn-container" id="cartBtn{{product.product_id}}" data-product-id={{product.product_id}}>
+                      <div class="cart-btn-container{% if product.stock == 0 %} out-of-stock{% endif %}" id="cartBtn{{product.product_id}}" data-product-id={{product.product_id}}>
+                        {% if product.stock > 0 %}
                         {% if product.cart_quantity > 0 %}
                             <button class="decrement-btn" id="decrementBtn{{ product.product_id }}">-</button>
                             <span id="itemNumber{{ product.product_id }}">{{ product.cart_quantity }}</span>
-                            <button class="increment-btn" id="incrementBtn{{ product.product_id }}">+</button>
+                            <button class="increment-btn" id="incrementBtn{{ product.product_id }}" data-stock="{{ product.stock }}">+</button>
                         {% else %}
                         <button class="cart-btn" id="{{product.product_id}}">Add to Cart</button>
+                        {% endif %}
+                        {% else %}
+                        <button class="notify-me-text" disabled><i class="bi bi-bell"></i> Notify Me</button>
                         {% endif %}
                       </div>
                     </div>
                   </div>
+                </div>
                 {% endfor %}
               <div class="swiper-button-next"></div>
             </div>

@@ -15,6 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     {% block css %}
     {% endblock %}
   </head>
@@ -63,8 +64,27 @@
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
+      
+      function showToast(message, type="success"){
 
+          let color =
+              type=="success"
+              ? "#198754"
+              : "#dc3545";
+
+          Toastify({
+              text: message,
+              duration:2500,
+              gravity:"bottom",
+              position:"right",
+              style:{
+                  background:color
+              }
+          }).showToast();
+
+      }
       $(document).ready(function(){
 
           $(".cart-item-btn").click(function(e){
@@ -120,6 +140,14 @@
       $(".cart-btn-container").on("click", ".increment-btn", function(){
         let productId = this.id.replace("incrementBtn", "")
 
+        let stock = parseInt($(this).data("stock"));
+        let quantity = parseInt($("#itemNumber" + productId).text());
+
+        if (quantity >= stock) {
+            showToast(`Only ${stock} items available`, "error");
+            return;
+        }
+
         fetch("/shop/update-cart/", {
           method : "POST",
           headers : {
@@ -134,9 +162,10 @@
         })
         .then(response => response.json())
         .then(data => {
+          showToast(data.message,data.status);
           $("#itemNumber" + productId).text(data.quantity)
-        $("#cartNumber").text(data.cart_count)
-        $("#cartContainer").html(data.cart_html)
+          $("#cartNumber").text(data.cart_count)
+          $("#cartContainer").html(data.cart_html)
         })
       })
 

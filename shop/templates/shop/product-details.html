@@ -10,7 +10,11 @@
             </div>
             <div class="col-lg-7">
                 <h1>{{product.product_name}}</h1>
-                <div class="stock"><span>In Stock</span></div>
+                {% if product.stock > 0 %}
+                    <span class="badge bg-success">In Stock</span>
+                {% else %}
+                    <span class="badge bg-danger">Out of Stock</span>
+                {% endif %}
                 <div class="price-box d-flex align-items-center gap-2">
                     <div class="old-price">₹ {{product.price}}</div>
                     <div class="price">₹ {{product.price}}</div>

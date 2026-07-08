@@ -68,24 +68,33 @@ main {
     height: 100%;
 }
 
-.featured-products .swiper-slide:nth-child(5n) .product-card {
+.featured-products .swiper-slide:nth-child(6n) .product-card {
     border-right: 0;
 }
 
-.product-card:last-child {
+.products-wrapper .swiper-slide:last-child .product-card {
     border-right: 0;
+}
+
+.out-of-stock-product {
+    opacity: 0.5;
+}
+
+.product-card.out-of-stock-product h3 a,
+.product-card.out-of-stock-product .price {
+    color: #999;
 }
 
 .discount-badge {
     position: absolute;
     top: 20px;
     left: 20px;
-    background: #2bbef9;
+    background: #ff0000;
     color: #fff;
-    padding: .275rem .75rem;
+    padding: .375rem .625rem;
     border-radius: 4px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     font-family: var(--secondary-font);
     max-height: 1.5rem;
     display: flex;
@@ -129,13 +138,20 @@ main {
 }
 
 .stock {
-    color: #00b853;
-    font-size: 14px;
     font-family: var(--secondary-font);
     font-weight: 600;
-    display: block;
+    display: inline-block;
     margin-bottom: 4px;
-    font-size: .6875rem;
+    font-size: .75rem;
+    background: #e8f8ed;
+    color: #198754;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.stock.orange-badge {
+    background: #fff4e5;
+    color: #ff6f00;
 }
 
 .rating {
@@ -153,7 +169,7 @@ main {
 }
 
 .old-price {
-    color: #c2c2d3;
+    color: #cacaca;
     text-decoration: line-through;
     margin-right: 5px;
     font-size: 15px;
@@ -163,7 +179,7 @@ main {
 .price {
     color: #d51243;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 700;
     font-family: var(--secondary-font);
 }
 
@@ -256,6 +272,20 @@ main {
     justify-content: space-between;
     border: 2px solid #2bbef9;
     border-radius: 40px;
+}
+
+.cart-btn-container.out-of-stock {
+    border: 2px solid #ff0000;
+}
+
+.cart-btn-container.out-of-stock .notify-me-text {
+    width: 100%;
+    text-align: center;
+    color: #ff0000;
+    border-radius: 40px;
+    border: 0px solid transparent;
+    padding: 0.25rem 1.25rem;
+    background-color: transparent;
 }
 
 .cart-container {

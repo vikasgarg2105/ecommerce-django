@@ -1,0 +1,108 @@
+:root {
+    --primary-color: #2bbef9;
+    --primary-font: "Inter", sans-serif;
+    --secondary-font: "Dosis", sans-serif;
+    --white: #ffffff;
+    --black: #000000;
+    --muted-text: #5b5b62;
+    --red: #ee0000;
+}
+
+body {
+    font-family: var(--primary-font);
+}
+
+section {
+    padding: 40px 0;
+}
+
+.login form {
+    max-width: 420px;
+    margin: 0px auto;
+}
+
+.login.signup form {
+    max-width: 520px;
+}
+
+.login h1 {
+    font-family: var(--secondary-font);
+    font-size: 3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.login button[type="submit"] {
+    background-color: #233a95;
+    border: 0px solid;
+    height: 2.75rem;
+    padding: .375rem 1rem;
+    font-weight: 600;
+    min-width: 160px;
+}
+
+.login .view-password {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translate(0px, -50%);
+    font-size: 18px;
+    color: #233a95;
+    cursor: pointer;
+}
+
+.or-text {
+    margin: 32px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #d9d9d9;
+    height: 0px;
+}
+
+.or-text p {
+    background-color: var(--white);
+    padding: 0px 8px;
+}
+
+.or-text::after {
+    content: "";
+}
+
+.or-text::before {
+    content: "";
+}
+
+.login .forgot-password {
+    text-decoration: none;
+    font-family: var(--primary-font);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 24px;
+}
+
+form label {
+    font-size: .8125rem;
+    color: #202435;
+}
+
+input.form-control,
+select,
+input.form-control:focus,
+select:focus {
+    font-size: .9375rem !important;
+    color: #202435 !important;
+    background-color: #f3f4f7 !important;
+    height: 2.75rem;
+    border: 0px solid !important;
+}
+
+textarea:focus,
+textarea {
+    font-size: .9375rem;
+    color: #202435;
+    background-color: #f3f4f7;
+    border: 0px solid;
+    resize: none;
+}

@@ -25,7 +25,7 @@ class OrderItemInline(admin.TabularInline):
     readonly_fields = (
         "product",
         "quantity",
-        "price",
+        "selling_price",
     )
 
     def has_add_permission(self, request, obj=None):

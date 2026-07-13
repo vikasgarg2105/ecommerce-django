@@ -2,7 +2,8 @@
 {% block title %} Checkout {% endblock %}
 {% block css %}{% endblock %}
 {% block body %}
-<section class="checkout">
+<main>
+    <section class="checkout">
     <form method="POST">
         <div class="container">
             <div class="row">
@@ -106,7 +107,7 @@
                             {% for product in cart_products %}
                             <div class="product-item mb-3">
                                 <p class="mb-0">{{product.product_name}}  <strong>× {{product.quantity}}</strong></p>
-                                <span>₹{{product.price}}</span>
+                                <span>₹{{product.selling_price}}</span>
                             </div>
                             {% endfor %}
                             <div class="divider"></div>
@@ -169,4 +170,5 @@
             </div>
         </form>
     </section>
+</main>
 {% endblock %}

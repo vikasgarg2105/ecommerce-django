@@ -3,7 +3,8 @@
 
 {% block title %}Cart{% endblock %}
 {% block body %}
-<div class="cart py-5">
+<main>
+    <div class="cart py-5">
     <div class="container">
         <div class="row">
             {% if cart_products %}
@@ -24,8 +25,8 @@
                                 {% for cart in cart_products %}
                                 <tr id="row{{ cart.product_id }}">
                                     <td><img src={{cart.product_image.url}} alt="" class="img-fluid" width="80" height="80"></td>
-                                    <td><p class="product-title">{{cart.product_name}}</p></td>
-                                    <td>₹{{cart.price}}</td>
+                                    <td><p class="product-title mb-0">{{cart.product_name}}</p></td>
+                                    <td>₹{{cart.selling_price}}</td>
                                     <td>
                                         <button class="decrement-btn" data-id="{{ cart.product_id }}">-</button>
                                         <span class="product-qty-count" id="itemNumber{{ cart.product_id }}">{{cart.quantity}}</span>
@@ -54,7 +55,7 @@
                     <p>Total Items: {{ cart_count }}</p>
                     <p>Shipping: Free</p>
                     <p>Tax: ₹0</p>
-                    <p>Total: ₹{{total_price}}</p>
+                    <p>Total: <span id="cartTotal">₹{{ total_price }}</span></p>
                     <a href="{% url 'checkout' %}" class="checkout-btn">Proceed to Checkout</a>
                 </div>
             </div>
@@ -68,6 +69,7 @@
         </div>
     </div>
 </div>
+</main>
 {% endblock %}
 
 {% block js %}
@@ -106,17 +108,33 @@
                     product_id: productId,
                     action: action
                 })
-            }).then(response => response.json())
+            }).then(async response => {
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showToast(data.message, "error");
+                    return null;
+                }
+
+                return data;
+            })
             .then(data =>{
-                if(data.is_empty){
+                if (!data) return;
+
+                showToast(data.message, data.status);
+
+                if (data.is_empty) {
                     location.reload();
                     return;
                 }
-                if (data.deleted){
-                    $("#row" + productId).remove();
+                if(data.deleted){
+                    $("#row"+productId).remove();
                 }else{
-                    location.reload();
+                    $("#itemNumber"+productId).text(data.quantity);
+                    $("#subtotal"+productId).text("₹"+data.subtotal);
                 }
+                $("#cartTotal").text("₹"+data.total_price);
                 $("#cartNumber").text(data.cart_count);
             })
         }

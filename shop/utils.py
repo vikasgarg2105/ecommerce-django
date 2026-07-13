@@ -7,6 +7,6 @@ def get_cart_products(cart):
         product = Product.objects.get(product_id = product_id)
 
         product.quantity = quantity
-        product.subtotal = product.price * quantity
+        product.subtotal = product.selling_price * quantity
         cart_products.append(product)
     return cart_products

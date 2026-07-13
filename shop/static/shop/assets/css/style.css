@@ -137,7 +137,8 @@ main {
     display: -webkit-inline-box;
 }
 
-.stock {
+.stock,
+.badge {
     font-family: var(--secondary-font);
     font-weight: 600;
     display: inline-block;
@@ -152,6 +153,13 @@ main {
 .stock.orange-badge {
     background: #fff4e5;
     color: #ff6f00;
+}
+
+.badge {
+    min-height: 22px;
+    color: var(--white);
+    display: inline-flex;
+    align-items: center;
 }
 
 .rating {
@@ -366,7 +374,7 @@ main {
     margin-bottom: 24px;
 }
 
-.billing-details label {
+form label {
     font-size: .8125rem;
     color: #202435;
 }
@@ -383,19 +391,19 @@ main {
     margin-bottom: 16px;
 }
 
-.billing-details input,
-.billing-details select,
-.billing-details input:focus,
-.billing-details select:focus {
-    font-size: .9375rem;
-    color: #202435;
-    background-color: #f3f4f7;
+input.form-control,
+select,
+input.form-control:focus,
+select:focus {
+    font-size: .9375rem !important;
+    color: #202435 !important;
+    background-color: #f3f4f7 !important;
     height: 2.75rem;
-    border: 0px solid;
+    border: 0px solid !important;
 }
 
-.billing-details textarea:focus,
-.billing-details textarea {
+textarea:focus,
+textarea {
     font-size: .9375rem;
     color: #202435;
     background-color: #f3f4f7;

@@ -7,7 +7,7 @@
             <div class="cart-product-info">
                 <h5><a href="{% url 'product_details' product.product_id %}">{{product.product_name}}</a></h5>
                 <div class="d-flex align-items-center gap-2">
-                    <p>₹ {{ product.price }}</p>
+                    <p>Price: ₹ {{ product.selling_price }}</p> |
                     <span>Qty: {{product.quantity}}</span>
                 </div>
             </div>

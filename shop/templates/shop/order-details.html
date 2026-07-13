@@ -7,7 +7,8 @@ Order Details
 
 {% block body %}
 
-<section class="order-details py-5">
+<main>
+    <section class="order-details py-5">
     <div class="container">
 
         <!-- Heading -->
@@ -78,12 +79,12 @@ Order Details
 
                                     </td>
 
-                                    <td>₹{{ item.price }}</td>
+                                    <td>₹{{ item.selling_price }}</td>
 
                                     <td>{{ item.quantity }}</td>
 
                                     <td>
-                                        ₹{{ item.price }}
+                                        ₹{{ item.subtotal }}
                                     </td>
 
                                 </tr>
@@ -193,51 +194,35 @@ Order Details
 
                     <div class="card-body">
 
-                        <h5>
-                            {{ order.firstname }} {{ order.lastname }}
-                        </h5>
-
+                        <h5>{{ order.firstname }} {{ order.lastname }}</h5>
                         <p>{{ order.address1 }}</p>
-
                         <p>{{ order.address2 }}</p>
-
                         <p>
                             {{ order.city }},
                             {{ order.state }}
                             - {{ order.pincode }}
                         </p>
-
                         <p>{{ order.phone }}</p>
-
                         <p>{{ order.email }}</p>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
 
 
         <!-- Buttons -->
 
         <div class="mt-4 d-flex justify-content-between">
-
             <a href="{% url 'shopHome' %}"
                class="btn btn-outline-success">
-
                 Continue Shopping
-
             </a>
-
             <button class="btn btn-dark">
                 Print Invoice
             </button>
-
         </div>
-
     </div>
 </section>
+</main>
 
 {% endblock %}

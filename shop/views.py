@@ -8,6 +8,7 @@ from .models import Product, Contact, Order, OrderItem
 
 
 # Create your views here.
+
 def shophome(request):
     cart = request.session.get("cart", {})
 
@@ -116,6 +117,13 @@ def update_cart(request):
 
     request.session["cart"] = cart
 
+    quantity = cart.get(product_id, 0)
+
+    subtotal = 0
+    
+    if quantity > 0:
+        subtotal = product.selling_price * quantity
+
     cart_products = get_cart_products(cart)
     cart_html = render_to_string(
         "shop/components/cart-items.html", {"cart_products" : cart_products}
@@ -126,8 +134,9 @@ def update_cart(request):
 
     return JsonResponse({
         "status": "success",
-        "message": f"Product updated in cart.",
-        "quantity": cart.get(product_id, 0),
+        "message": "Cart updated.",
+        "quantity": quantity,
+        "subtotal": subtotal,
         "deleted": deleted,
         "cart_count": sum(cart.values()),
         "cart_html": cart_html,
@@ -163,7 +172,7 @@ def cart(request):
     for product_id,qty in cart.items():
         product = Product.objects.get(product_id = product_id)
         product.quantity = qty
-        product.subtotal = (product.price*qty)
+        product.subtotal = (product.selling_price*qty)
         total_price += product.subtotal
         
         cart_products.append(product)
@@ -268,7 +277,7 @@ def checkout(request):
                 order = order,
                 product = product,
                 quantity = product.quantity,
-                price = product.price
+                selling_price = product.selling_price
             )
 
             product.stock -= product.quantity

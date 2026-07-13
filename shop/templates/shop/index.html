@@ -6,7 +6,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
 {% endblock %}
 {% block body %}
-{% if products %}
+<main>
+  {% if products %}
 <section class="featured-products">
   <div class="container">
     <div class="row">
@@ -27,7 +28,7 @@
                 <div class="swiper-slide">
                   <div class="product-card {% if product.stock == 0 %} out-of-stock-product{% endif %}">
                     <div class="product-image">
-                      <span class="discount-badge">41%</span>
+                      <span class="discount-badge">{{product.discount_percentage}}%</span>
                       {% if product.product_image %}
                         <img src="{{ product.product_image.url }}" alt="Product" />
                       {% endif %}
@@ -46,8 +47,8 @@
                         ★★★★☆ <span>(1)</span>
                       </div>
                       <div class="price-box">
-                        <span class="old-price">₹ {{ product.price }}</span>
-                        <span class="price">₹ {{ product.price }}</span>
+                        <span class="old-price">₹ {{ product.mrp }}</span>
+                        <span class="price">₹ {{ product.selling_price }}</span>
                       </div>
                       <div class="cart-btn-container{% if product.stock == 0 %} out-of-stock{% endif %}" id="cartBtn{{product.product_id}}" data-product-id={{product.product_id}}>
                         {% if product.stock > 0 %}
@@ -76,6 +77,7 @@
   </div>
 </section>
   {% endif %}
+</main>
 {% endblock %}
 
 {% block js %}

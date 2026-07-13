@@ -1,0 +1,91 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+{% block header %}
+{% endblock %}
+{% block body %}
+<section class="login pt-5 mt-5 mb-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <h1 class="text-center mb-4">Login</h1>
+                    <div class="mb-3">
+                        <label for="email" class="form-label required">Username or Email address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Email" name="email">
+                        {% if errors.email %}
+                            <small class="text-danger">
+                                {{ errors.email }}
+                            </small>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label required">Password</label>
+                        <div class="position-relative">
+                            <input type="password" id="password" class="form-control" placeholder="Password" name="password">
+                            <i class="bi bi-eye-fill view-password"></i>
+                        </div>
+                        {% if errors.password %}
+                            <small class="text-danger">
+                                {{ errors.password }}
+                            </small>
+                        {% endif %}
+                        {% if errors.invalid %}
+                            <small class="text-danger">
+                                {{ errors.invalid }}
+                            </small>
+                        {% endif %}
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="rememberme">
+                        <label class="form-check-label" for="rememberme">
+                            Remember me
+                        </label>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <button type="submit" class="btn btn-primary mb-3">Login</button>
+                    </div>
+                    <a href="{% url "forgot_password" %}" class="forgot-password text-center d-block">Lost your password?</a>
+                    <div class="or-text text-center">
+                        <p class="mb-0">OR</p>
+                    </div>
+                    <a href="{% url "signup" %}" class="forgot-password text-center d-block">Register an account?</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block js %}
+<script>
+    $(document).ready(function () {
+
+    $(".view-password").on("click", function () {
+
+        let input = $(this).siblings("input");
+
+        if (input.attr("type") === "password") {
+
+            input.attr("type", "text");
+
+            $(this)
+                .removeClass("bi-eye-fill")
+                .addClass("bi-eye-slash-fill");
+
+        } else {
+
+            input.attr("type", "password");
+
+            $(this)
+                .removeClass("bi-eye-slash-fill")
+                .addClass("bi-eye-fill");
+        }
+
+    });
+
+});
+</script>
+{% endblock %}

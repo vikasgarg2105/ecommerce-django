@@ -13,6 +13,14 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to="shop/product", default="")
     stock = models.PositiveIntegerField(default=0)
 
+    @property
+    def discount_percentage(self):
+        if self.mrp <= 0:
+            return 0
+        return round(
+            ((self.mrp - self.selling_price) / self.mrp) * 100
+        )
+
     def __str__(self):
         return self.product_name
 
@@ -50,7 +58,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete = models.CASCADE)
     product = models.ForeignKey(Product, on_delete = models.CASCADE)
     quantity = models.IntegerField()
-    price = models.IntegerField()
+    selling_price = models.IntegerField()
 
     def __str__(self):
         return str(self.product_id)

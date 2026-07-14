@@ -62,30 +62,20 @@
 {% block js %}
 <script>
     $(document).ready(function () {
-
     $(".view-password").on("click", function () {
-
         let input = $(this).siblings("input");
-
         if (input.attr("type") === "password") {
-
             input.attr("type", "text");
-
             $(this)
                 .removeClass("bi-eye-fill")
                 .addClass("bi-eye-slash-fill");
-
         } else {
-
             input.attr("type", "password");
-
             $(this)
                 .removeClass("bi-eye-slash-fill")
                 .addClass("bi-eye-fill");
         }
-
     });
-
 });
 </script>
 {% endblock %}

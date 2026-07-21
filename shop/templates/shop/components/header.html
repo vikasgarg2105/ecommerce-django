@@ -9,7 +9,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
-            <ul class="navbar-nav align-items-center justify-content-end flex-grow-1 pe-3">
+            <ul class="navbar-nav align-items-center justify-content-end flex-grow-1">
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'shopHome' %}">Home</a>
               </li>
@@ -17,20 +17,54 @@
                 <a class="nav-link" href="{% url 'about' %}">About Us</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'tracking_status' %}">Tracker</a>
+                <a class="nav-link" href="{% url 'tracking_status' %}">Categories</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
+                <a class="nav-link" href="{% url 'contact' %}">Contact</a>
               </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-            <div class="cart-box position-relative">
-              <button type="button" class="cart-item-btn ms-2"><img src="{% static 'shop/assets/images/cart.svg' %}" class="img-fluid" alt="cart" /><span id="cartNumber">{{ cart_count }}</span></button>
-              <div class="cart-container" id="cartContainer">
-              </div>
+            <div class="action-wrapper">
+              <form class="d-flex position-relative" role="search">
+                <input class="form-control" type="search" placeholder="Search products..." aria-label="Search" />
+                <button class="global-search-btn" type="submit"><i class="bi bi-search"></i></button>
+              </form>
+              {% if not request.user.is_authenticated %}
+                <ul class="navbar-nav authentication-btn{% if not request.user.is_authenticated %} mx-0{% endif %}">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link signup-btn" href="{% url 'signup' %}">Signup</a>
+                  </li>
+                </ul>
+                {% endif %}
+              
+                <div class="cart-box position-relative">
+                  <button type="button" class="cart-item-btn"><img src="{% static 'shop/assets/images/cart.svg' %}" class="img-fluid" alt="cart" /><span id="cartNumber">{{ cart_count }}</span></button>
+                  <div class="cart-container" id="cartContainer">
+                  </div>
+                </div>
+                {% if request.user.is_authenticated %}
+                <div class="dropdown">
+                  <button class="user-dropdown-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if request.user.profile_image %}
+                      <div class="user-img">
+                        <img src="{{ request.user.profile_image.url }}" class="img-fluid">
+                      </div>
+                    {% else %}
+                      <i class="bi bi-person-circle"></i>
+                    {% endif %}
+                    <span>{{ request.user.first_name|default:request.user.username }}</span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="bi bi-person"></i> My Profile</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-box-seam"></i> My Orders</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-heart"></i> Wishlist</a></li>
+                    <li><hr class="my-2"></li>
+                    <li><a class="dropdown-item logout" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                  </ul>
+                </div>
+              {% endif %}
             </div>
           </div>
         </div>

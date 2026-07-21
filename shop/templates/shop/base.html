@@ -29,24 +29,48 @@
     <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
-      
-      function showToast(message, type="success"){
+      {% if messages %}
+        document.addEventListener("DOMContentLoaded", function () {
 
-          let color =
-              type=="success"
-              ? "#198754"
-              : "#dc3545";
+            {% for message in messages %}
+                showToast("{{ message|escapejs }}", "{{ message.tags }}");
+            {% endfor %}
+
+        });
+      {% endif %}
+      function showToast(message, type = "success") {
+
+          let color = "#198754";
+
+          switch(type){
+              case "success":
+                  color = "#198754";
+                  break;
+
+              case "error":
+                  color = "#dc3545";
+                  break;
+
+              case "warning":
+                  color = "#ffc107";
+                  break;
+
+              case "info":
+                  color = "#0dcaf0";
+                  break;
+          }
 
           Toastify({
               text: message,
-              duration:2500,
-              gravity:"bottom",
-              position:"right",
-              style:{
-                  background:color
+              duration: 3000,
+              gravity: "bottom",
+              position: "right",
+              close: true,
+              stopOnFocus: true,
+              style: {
+                  background: color
               }
           }).showToast();
-
       }
       $(document).ready(function(){
 

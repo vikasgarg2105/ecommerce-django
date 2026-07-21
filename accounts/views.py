@@ -3,6 +3,7 @@ from .validators import validators_signup, validators_login
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import User
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -75,6 +76,32 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
+@login_required
+def profile(request):
+    user = request.user
+
+    print("user", request.FILES)
+
+    if request.method == "POST":
+        user.first_name = request.POST.get("first_name")
+        user.last_name = request.POST.get("last_name")
+        user.phone = request.POST.get("phone")
+
+        if "profile_image" in request.FILES:
+            user.profile_image = request.FILES["profile_image"]
+
+        user.save()
+        messages.success(request, "Profile updated successfully.")
+
+        return redirect("profile")
+
+    context = {
+        'user' : user
+    }
+    return render(request, 'accounts/profile.html', context)
 
 def forgot_password(request):
     return render(request, 'accounts/forgot-password.html')
+
+def change_password(request):
+    return render(request, 'accounts/change-password.html')

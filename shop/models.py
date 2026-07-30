@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import User
 
 # Create your models here.
 class Product(models.Model):
@@ -36,6 +37,7 @@ class Contact(models.Model):
 
 class Order(models.Model):
     order_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     firstname = models.CharField(max_length=100, default="")
     lastname = models.CharField(max_length=100, default="")
     email = models.EmailField()

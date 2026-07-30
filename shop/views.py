@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 import json
 from .utils import get_cart_products
-
+from django.contrib.auth.decorators import login_required
 from .models import Product, Contact, Order, OrderItem
 
 
@@ -184,7 +184,7 @@ def cart(request):
 
     return render(request, 'shop/cart.html', context)
 
-
+@login_required
 def checkout(request):
     cart = request.session.get("cart", {})
 
@@ -258,6 +258,7 @@ def checkout(request):
 
 
         order = Order.objects.create(
+            user = request.user,
             firstname = firstname,
             lastname = lastname,
             email = email,

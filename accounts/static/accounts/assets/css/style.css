@@ -114,7 +114,7 @@ textarea {
     margin-top: 20px;
 }
 
-.password-indicator p span.strong {
+.password-indicator p span#passwordStrength {
     color: var(--primary-color);
 }
 
@@ -130,4 +130,46 @@ textarea {
     height: 8px;
     border-radius: 6px;
     background-color: #ececec;
+}
+
+.password-indicator .blank-space.filled {
+    background-color: var(--primary-color);
+}
+
+.password-instructions {
+    list-style: none;
+    padding: 0px;
+    font-size: 0.875rem;
+    color: gray;
+}
+
+.password-instructions li {
+    margin-bottom: 4px;
+}
+
+.password-instructions img,
+.password-instructions i {
+    max-width: 20px;
+    margin-right: 4px;
+}
+
+.profile .description {
+    font-size: 0.875rem;
+    color: gray;
+}
+
+.blank-space.active {
+    background: #22c55e;
+}
+
+#passwordStrength.weak {
+    color: #dc3545;
+}
+
+#passwordStrength.medium {
+    color: #fd7e14;
+}
+
+#passwordStrength.strong {
+    color: #198754;
 }

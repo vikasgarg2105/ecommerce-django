@@ -1,0 +1,68 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block body %}
+<main>
+    <section class="my-orders">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>My Orders</h1>
+                </div>
+                <div class="col-12">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="all-orders-tab" data-bs-toggle="tab" data-bs-target="#all-orders-tab-pane" type="button" role="tab" aria-controls="all-orders-tab-pane" aria-selected="true">All Orders</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending-tab-pane" type="button" role="tab" aria-controls="pending-tab-pane" aria-selected="false">Pending</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="shipped-tab" data-bs-toggle="tab" data-bs-target="#shipped-tab-pane" type="button" role="tab" aria-controls="shipped-tab-pane" aria-selected="false">Shipped</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="delivered-tab" data-bs-toggle="tab" data-bs-target="#delivered-tab-pane" type="button" role="tab" aria-controls="delivered-tab-pane" aria-selected="false">Delivered</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="cancelled-tab" data-bs-toggle="tab" data-bs-target="#cancelled-tab-pane" type="button" role="tab" aria-controls="cancelled-tab-pane" aria-selected="false">Cancelled</button>
+                        </li>
+                        
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="all-orders-tab-pane" role="tabpanel" aria-labelledby="all-orders-tab" tabindex="0">...</div>
+                        <div class="tab-pane fade" id="pending-tab-pane" role="tabpanel" aria-labelledby="pending-tab" tabindex="0">...</div>
+                        <div class="tab-pane fade" id="shipped-tab-pane" role="tabpanel" aria-labelledby="shipped-tab" tabindex="0">...</div>
+                        <div class="tab-pane fade" id="delivered-tab-pane" role="tabpanel" aria-labelledby="delivered-tab" tabindex="0">...</div>
+                        <div class="tab-pane fade" id="cancelled-tab-pane" role="tabpanel" aria-labelledby="cancelled-tab" tabindex="0">...</div>
+                    </div>
+                </div>
+                {% comment %} <div class="col-lg-4">
+                    {% for order in orders %}
+                    <div class="card p-3 mb-4">
+                        <h5>Order #{{ order.order_id }}</h5>
+                        <p>Total : ₹{{ order.total_amount }}</p>
+                        <p>Status : {{ order.order_status }}</p>
+                        <p>Date : {{ order.created_at }}</p>
+                        <hr>
+                        {% for item in order.orderitem_set.all %}
+                            <div class="mb-3">
+                                <img src="{{ item.product.product_image.url }}" width="80">
+                                <h6>{{ item.product.product_name }}</h6>
+                                <p>Qty : {{ item.quantity }}</p>
+                                <p>Price : ₹{{ item.selling_price }}</p>
+                            </div>
+                        {% empty %}
+                            <p>No products found.</p>
+                        {% endfor %}
+                    </div>
+                    {% empty %}
+                    <h4>No Orders Found</h4>
+                    {% endfor %}
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

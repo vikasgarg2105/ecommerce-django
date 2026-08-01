@@ -32,68 +32,20 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="all-orders-tab-pane" role="tabpanel" aria-labelledby="all-orders-tab" tabindex="0">
-                            <div class="order-item">
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <div class="order-details">
-                                            <div class="order-id mb-3">
-                                                <span class="mb-1">Order Id</span>
-                                                <p class="mb-0">#ORD0001</p>
-                                            </div>
-                                            <div class="order-date mb-4">
-                                               <i class="bi bi-calendar3 me-1"></i> 27 July 2026, 04:35PM
-                                            </div>
-                                            <div class="order-payment-method">
-                                                <span class="mb-1">Payment Method</span>
-                                                <div class="payment-type"><i class="bi bi-credit-card me-1"></i> <p class="mb-0">Credit Card</p></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-7">
-                                        <div class="order-product-details">
-                                            <div class="order-product">
-                                                <div class="d-flex align-items-center gap-1">
-                                                    <div class="order-img">
-                                                        <img src="/media/shop/product/product-image-38-346x310_WzcPJMv.webp" class="img-fluid" alt="" width="80">
-                                                    </div>
-                                                    <div class="order-product-info">
-                                                        <h5><a href="/shop/product-details/1/">Haagen-Dazs Caramel Cone Ice Cream</a></h5>
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <p class="mb-0">Price: <span>₹ 280</span></p> |
-                                                            <p>Qty: <span>1</span></p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="order-product-price">
-                                                    <p class="mb-0">₹ 280</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="amount-details">
-                                            <div class="total-amount">
-                                                <span class="mb-1">Total Amount</span>
-                                                <p class="mb-2">₹ 780</p>
-                                            </div>
-                                            <div class="order-status pending">
-                                                <p class="mb-0">Pending</p>
-                                            </div>
-                                            <div class="view-details-btn">
-                                                <a href="">View Details</a>
-                                            </div>
-                                            <div class="cancel-order-btn">
-                                                <a href="">Cancel Order</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {% include "accounts/includes/order-card.html" with orders=all_orders %}
                         </div>
-                        <div class="tab-pane fade" id="pending-tab-pane" role="tabpanel" aria-labelledby="pending-tab" tabindex="0">...</div>
-                        <div class="tab-pane fade" id="shipped-tab-pane" role="tabpanel" aria-labelledby="shipped-tab" tabindex="0">...</div>
-                        <div class="tab-pane fade" id="delivered-tab-pane" role="tabpanel" aria-labelledby="delivered-tab" tabindex="0">...</div>
-                        <div class="tab-pane fade" id="cancelled-tab-pane" role="tabpanel" aria-labelledby="cancelled-tab" tabindex="0">...</div>
+                        <div class="tab-pane fade" id="pending-tab-pane" role="tabpanel" aria-labelledby="pending-tab" tabindex="0">
+                            {% include "accounts/includes/order-card.html" with orders=pending_orders %}
+                        </div>
+                        <div class="tab-pane fade" id="shipped-tab-pane" role="tabpanel" aria-labelledby="shipped-tab" tabindex="0">
+                            {% include "accounts/includes/order-card.html" with orders=shipped_orders %}
+                        </div>
+                        <div class="tab-pane fade" id="delivered-tab-pane" role="tabpanel" aria-labelledby="delivered-tab" tabindex="0">
+                            {% include "accounts/includes/order-card.html" with orders=delivered_orders %}
+                        </div>
+                        <div class="tab-pane fade" id="cancelled-tab-pane" role="tabpanel" aria-labelledby="cancelled-tab" tabindex="0">
+                            {% include "accounts/includes/order-card.html" with orders=cancelled_orders %}
+                        </div>
                     </div>
                 </div>
             </div>

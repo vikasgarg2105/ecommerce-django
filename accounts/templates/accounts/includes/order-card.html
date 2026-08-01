@@ -1,0 +1,71 @@
+{% load static %}
+
+{% for order in orders %}
+    <div class="order-item mb-3">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="order-details">
+                    <div class="order-id mb-3">
+                        <span class="mb-1">Order Id</span>
+                        <p class="mb-0">#{{order.order_id}}</p>
+                    </div>
+                    <div class="order-date mb-4">
+                        <i class="bi bi-calendar3 me-1"></i> {{order.created_at}}
+                    </div>
+                    <div class="order-payment-method">
+                        <span class="mb-1">Payment Method</span>
+                        <div class="payment-type"><i class="bi bi-credit-card me-1"></i> <p class="mb-0">{{order.payment_method}}</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="order-product-details">
+                    {% for item in order.orderitem_set.all %}
+                    <div class="order-product">
+                        <div class="d-flex align-items-center gap-1">
+                            <div class="order-img">
+                                <img src="{{item.product.product_image.url}}" class="img-fluid" alt="{{ item.product.product_name }}" width="80">
+                            </div>
+                            <div class="order-product-info">
+                                <h5><a href="/shop/product-details/1/">{{item.product.product_name}}</a></h5>
+                                <div class="d-flex align-items-center gap-2">
+                                    <p class="mb-0">Price: <span>₹ {{item.selling_price}}</span></p> |
+                                    <p>Qty: <span>{{item.quantity}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order-product-price">
+                            <p class="mb-0">₹ {{ item.total_price }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="amount-details">
+                    <div class="total-amount">
+                        <span class="mb-1">Total Amount</span>
+                        <p class="mb-2">₹ {{order.total_amount}}</p>
+                    </div>
+                    <div class="order-status pending">
+                        <p class="mb-0">{{order.order_status}}</p>
+                    </div>
+                    <div class="view-details-btn">
+                        <a href="">View Details</a>
+                    </div>
+                    <div class="cancel-order-btn">
+                        <a href="">Cancel Order</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% empty %}
+        <div class="no-orders text-center">
+            <img src="{% static 'images/no-orders.png' %}" alt="No Orders" class="img-fluid mb-3" width="200">
+            <h4>No Orders Found</h4>
+            <p>You haven't placed any orders yet. Start shopping now!</p>
+            <a href="" class="btn btn-primary">Shop Now</a>
+        </div>
+    {% endfor %}

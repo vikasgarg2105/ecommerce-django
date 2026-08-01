@@ -62,5 +62,9 @@ class OrderItem(models.Model):
     quantity = models.IntegerField()
     selling_price = models.IntegerField()
 
+    @property
+    def total_price(self):
+        return self.quantity * self.selling_price
+
     def __str__(self):
         return str(self.product_id)

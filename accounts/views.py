@@ -158,6 +158,15 @@ def change_password(request):
 
 @login_required
 def my_orders(request):
-    orders = (Order.objects.filter(user = request.user).prefetch_related("orderitem_set__product").order_by("-created_at"))
+    all_orders = Order.objects.filter(user = request.user).prefetch_related("orderitem_set__product").order_by("-created_at")
 
-    return render(request, "accounts/my-orders.html", {"orders": orders})
+    context = {
+        "all_orders": all_orders,
+        "pending_orders" : all_orders.filter(order_status="Pending"),
+        "shipped_orders" : all_orders.filter(order_status="Shipped"),
+        "delivered_orders" : all_orders.filter(order_status="Delivered"),
+        "cancelled_orders" : all_orders.filter(order_status="Cancelled"),
+
+    }
+
+    return render(request, "accounts/my-orders.html", context)

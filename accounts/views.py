@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .validators import validators_signup, validators_login
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -170,3 +170,13 @@ def my_orders(request):
     }
 
     return render(request, "accounts/my-orders.html", context)
+
+@login_required
+def order_details(request, order_id):
+    order = get_object_or_404(Order.objects.prefetch_related("orderitem_set__product"), order_id=order_id, user=request.user)
+
+    context = {
+        "order": order
+    }
+
+    return render(request, "accounts/order-details.html", context)

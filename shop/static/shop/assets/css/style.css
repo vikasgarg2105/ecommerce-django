@@ -1033,14 +1033,164 @@ table tbody tr td {
 }
 
 .order-status.pending {
-    color: orange;
-    background-color: rgba(255, 166, 0, 0.15);
+    background: #fff3cd;
+    color: #ff9800;
+}
+
+.order-status.shipped {
+    background: #d1ecff;
+    color: #007bff;
+}
+
+.order-product-details .more-product-show {
+    font-size: 12px;
+    color: #ff0000;
+    text-decoration: none;
+}
+
+.order-status.delivered {
+    background: #d4edda;
+    color: #28a745;
+}
+
+.order-status.cancelled {
+    background: #f8d7da;
+    color: #dc3545;
 }
 
 .amount-details .total-amount p {
     font-size: 1.35rem;
     font-weight: 700;
     color: #202435;
+}
+
+.modal-product {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-summary-box {
+    border-top: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    background-color: #fafafa;
+}
+
+.order-model .modal-body {
+    padding: 0px;
+    overflow: unset;
+}
+
+.order-model .user-address,
+.order-model .order-model-body {
+    padding: 20px 20px 0px 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.order-model .order-product-img {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+}
+
+.order-model .order-product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.summary-item {
+    flex: 1;
+}
+
+.summary-item span {
+    display: block;
+    font-size: 12px;
+    color: #6c757d;
+    margin-bottom: 8px;
+}
+
+.summary-item h5 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.summary-item.total h4 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.user-address {
+    border-right: 1px solid #e9ecef;
+}
+
+.summary-item.total {
+    text-align: right;
+}
+
+.discount h5 {
+    color: #16a34a;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-address h5,
+.order-model-body h5 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.user-address h5 i,
+.order-model-body h5 i {
+    color: var(--primary-color);
+}
+
+.user-address p {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 4px;
+}
+
+.order-model-body .order-product-info h6 {
+    color: #202435;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: var(--primary-font);
+    font-weight: 600;
+}
+
+.order-model-body .order-product-info p {
+    font-size: 12px;
+    color: #5c5c5c;
+}
+
+.order-model-body .order-product-info p span {
+    font-weight: 600;
+    color: #585858;
+}
+
+.order-model .download-invoice {
+    background-color: #41bf74;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 1px solid #41bf74;
+    font-size: 14px;
 }
 
 @media(max-width:768px) {

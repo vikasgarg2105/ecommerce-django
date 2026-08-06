@@ -20,7 +20,7 @@
             </div>
             <div class="col-lg-7">
                 <div class="order-product-details">
-                    {% for item in order.orderitem_set.all|slice:":2" %}
+                    {% for item in order.items.all|slice:":2" %}
                     <div class="order-product">
                         <div class="d-flex align-items-center gap-1">
                             <div class="order-img">
@@ -34,13 +34,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div -price">
+                        <div class="price">
                             <p class="mb-0">₹ {{ item.total_price }}</p>
                         </div>
                     </div>
                     {% endfor %}
                     {% if total_items > 2 %}
-                        <a href="#" class="more-product-show" data-bs-toggle="modal" data-bs-target="#orderModal{{ order.order_id }}"> +{{ total_items|add:"-2" }} more products</a>
+                        <a href="#" class="more-product-show" data-bs-toggle="modal" data-bs-target="#{{ modal_prefix }}OrderModal{{ order.order_id }}"> +{{ total_items|add:"-2" }} more products</a>
                     {% endif %}
                 </div>
             </div>
@@ -54,8 +54,8 @@
                         <p class="mb-0">{{order.order_status}}</p>
                     </div>
                     <div class="view-details-btn">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal{{ order.order_id }}">View Details</a>
-                        <div class="modal order-model fade" id="orderModal{{ order.order_id }}" tabindex="-1">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#{{ modal_prefix }}OrderModal{{ order.order_id }}">View Details</a>
+                        <div class="modal order-model fade" id="{{ modal_prefix }}OrderModal{{ order.order_id }}" tabindex="-1">
                             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header justify-content-between">
@@ -73,7 +73,7 @@
                                             {% if order.order_status == "Pending" %}
                                                 <button class="download-invoice me-2">View Invoice</button>
                                                 {% else %}
-                                                <button class="download-invoice me-2">Download Invoice</button>
+                                                <a href="{% url 'download_invoice' order.order_id %}" class="download-invoice me-2">Download Invoice</a>
                                                 {% endif %}
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
@@ -91,8 +91,8 @@
                                             </div>
                                             <div class="col-lg-8">
                                                 <div class="order-model-body">
-                                                    <h5><i class="bi bi-geo-alt-fill me-1"></i> Order Items ({{ order.orderitem_set.all|length }})</h5>
-                                                    {% for item in order.orderitem_set.all %}
+                                                    <h5><i class="bi bi-geo-alt-fill me-1"></i> Order Items ({{ order.items.all|length }})</h5>
+                                                    {% for item in order.items.all %}
                                                     <div class="modal-product">
                                                         <div class="d-flex gap-3 align-items-center">
                                                             <div class="order-product-img">
@@ -137,7 +137,7 @@
                     </div>
                     {% if order.order_status == "Pending" %}
                     <div class="cancel-order-btn">
-                        <a href="">Cancel Order</a>
+                        <a href="{% url 'cancel_order' order.order_id %}">Cancel Order</a>
                     </div>
                     {% endif %}
                 </div>

@@ -32,19 +32,19 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="all-orders-tab-pane" role="tabpanel" aria-labelledby="all-orders-tab" tabindex="0">
-                            {% include "accounts/includes/order-card.html" with orders=all_orders %}
+                            {% include "accounts/includes/order-card.html" with orders=all_orders modal_prefix="all" %}
                         </div>
                         <div class="tab-pane fade" id="pending-tab-pane" role="tabpanel" aria-labelledby="pending-tab" tabindex="0">
-                            {% include "accounts/includes/order-card.html" with orders=pending_orders %}
+                            {% include "accounts/includes/order-card.html" with orders=pending_orders modal_prefix="pending"  %}
                         </div>
                         <div class="tab-pane fade" id="shipped-tab-pane" role="tabpanel" aria-labelledby="shipped-tab" tabindex="0">
-                            {% include "accounts/includes/order-card.html" with orders=shipped_orders %}
+                            {% include "accounts/includes/order-card.html" with orders=shipped_orders modal_prefix="shipped" %}
                         </div>
                         <div class="tab-pane fade" id="delivered-tab-pane" role="tabpanel" aria-labelledby="delivered-tab" tabindex="0">
-                            {% include "accounts/includes/order-card.html" with orders=delivered_orders %}
+                            {% include "accounts/includes/order-card.html" with orders=delivered_orders modal_prefix="delivered" %}
                         </div>
                         <div class="tab-pane fade" id="cancelled-tab-pane" role="tabpanel" aria-labelledby="cancelled-tab" tabindex="0">
-                            {% include "accounts/includes/order-card.html" with orders=cancelled_orders %}
+                            {% include "accounts/includes/order-card.html" with orders=cancelled_orders modal_prefix="cancelled" %}
                         </div>
                     </div>
                 </div>

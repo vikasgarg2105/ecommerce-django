@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+
+    <style>
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            color: #333;
+        }
+
+        .invoice {
+    width: 100%;
+    padding: 30px;
+    background: #fff;
+}
+
+.header-table,
+.address-table,
+.product-table,
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.company-info {
+    width: 55%;
+}
+
+.invoice-info {
+    width: 45%;
+    text-align: right;
+}
+
+.invoice-info h1 {
+    color: #1f4dbd;
+    font-size: 52px;
+}
+
+.address-table td {
+    border: 1px solid #ddd;
+    padding: 20px;
+}
+
+.product-table th {
+    background: #1f4dbd;
+    color: white;
+    padding: 14px;
+}
+
+.product-table td {
+    border: 1px solid #ddd;
+    padding: 16px;
+}
+
+.summary-table {
+    margin-top: 30px;
+}
+
+.grand-total {
+    font-size: 26px;
+    color: #1f4dbd;
+    font-weight: bold;
+}
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="invoice">
+
+    <!-- Header -->
+
+    <table class="header-table">
+        <tr>
+
+            <td class="company-info">
+
+                <img src="logo.png">
+
+                <h1>CartStore Pvt. Ltd.</h1>
+
+                <p>123, Business Park, Sector 62</p>
+
+                <p>Noida, Uttar Pradesh - 201301</p>
+
+                <p>+91 9876543210</p>
+
+                <p>support@cartstore.com</p>
+
+            </td>
+
+            <td class="invoice-info">
+
+                <h1>INVOICE</h1>
+
+                <table>
+
+                    <tr>
+                        <td>Invoice No.</td>
+                        <td>INV-{{ order.order_id }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Order ID</td>
+                        <td>#{{ order.order_id }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Date</td>
+                        <td>{{ order.created_at }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Payment</td>
+                        <td>{{ order.payment_method }}</td>
+                    </tr>
+
+                </table>
+
+            </td>
+
+        </tr>
+    </table>
+
+    <!-- Address -->
+
+    <table class="address-table">
+
+        <tr>
+
+            <td>
+
+                <h3>Billing Address</h3>
+
+                <p>{{ order.firstname }} {{ order.lastname }}</p>
+
+                <p>{{ order.email }}</p>
+
+                <p>{{ order.phone }}</p>
+
+                <p>{{ order.address1 }}</p>
+
+                <p>{{ order.city }}, {{ order.state }}</p>
+
+            </td>
+
+            <td>
+
+                <h3>Shipping Address</h3>
+
+                <p>{{ order.firstname }} {{ order.lastname }}</p>
+
+                <p>{{ order.phone }}</p>
+
+                <p>{{ order.address1 }}</p>
+
+                <p>{{ order.city }}, {{ order.state }}</p>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+    <!-- Products -->
+
+    <table class="product-table">
+
+        <thead>
+
+            <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for item in order.items.all %}
+
+            <tr>
+
+                <td>{{ forloop.counter }}</td>
+
+                <td>
+
+                    <img src="{{ item.product.product_image.path }}">
+
+                    {{ item.product.product_name }}
+
+                </td>
+
+                <td>{{ item.quantity }}</td>
+
+                <td>₹{{ item.selling_price }}</td>
+
+                <td>₹{{ item.total_price }}</td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <!-- Summary -->
+
+    <table class="summary-table">
+
+        <tr>
+
+            <td>
+
+                <h3>ORDER SUMMARY</h3>
+
+                <p>Total Items: {{ order.items.count }}</p>
+
+            </td>
+
+            <td>
+
+                <table>
+
+                    <tr>
+                        <td>Subtotal</td>
+                        <td>₹{{ order.total_amount }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Shipping</td>
+                        <td>₹0</td>
+                    </tr>
+
+                    <tr>
+                        <td>Discount</td>
+                        <td>₹0</td>
+                    </tr>
+
+                    <tr class="grand-total">
+                        <td>GRAND TOTAL</td>
+                        <td>₹{{ order.total_amount }}</td>
+                    </tr>
+
+                </table>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+</body>
+
+</html>

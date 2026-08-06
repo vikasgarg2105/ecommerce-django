@@ -8,8 +8,8 @@ class Product(models.Model):
     product_description = models.CharField(max_length=500)
     category = models.CharField(max_length=50, default="")
     sub_category = models.CharField(max_length=50, default="")
-    mrp = models.IntegerField(default=0)
-    selling_price = models.IntegerField(default=0)
+    mrp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     publish_date = models.DateField()
     product_image = models.ImageField(upload_to="shop/product", default="")
     stock = models.PositiveIntegerField(default=0)
@@ -36,6 +36,14 @@ class Contact(models.Model):
         return self.name
 
 class Order(models.Model):
+    STATUS_CHOICES = [
+        ("Pending", "Pending"),
+        ("Processing", "Processing"),
+        ("Shipped", "Shipped"),
+        ("Delivered", "Delivered"),
+        ("Cancelled", "Cancelled"),
+    ]
+
     order_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     firstname = models.CharField(max_length=100, default="")
@@ -43,13 +51,13 @@ class Order(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=15)
     address1 = models.TextField()
-    address2 = models.TextField()
+    address2 = models.TextField(blank=True, null=True, default="")
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
-    pincode = models.IntegerField()
-    total_amount = models.IntegerField()
+    pincode = models.CharField(max_length=10)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     payment_method = models.CharField(max_length=50, default="COD")
-    order_status = models.CharField(max_length=50, default="Pending")
+    order_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Pending")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -57,14 +65,15 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete = models.CASCADE)
+    order = models.ForeignKey(Order, on_delete = models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete = models.CASCADE)
-    quantity = models.IntegerField()
-    selling_price = models.IntegerField()
+    quantity = models.PositiveIntegerField()
+    selling_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    mrp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     @property
     def total_price(self):
         return self.quantity * self.selling_price
 
     def __str__(self):
-        return str(self.product_id)
+        return f"{self.product.product_name} ({self.quantity})"

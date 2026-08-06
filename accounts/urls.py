@@ -10,4 +10,6 @@ urlpatterns = [
     path("change-password/", views.change_password, name="change_password"),
     path("my-orders/", views.my_orders, name="my_orders"),
     path("my-orders/<int:order_id>/", views.order_details, name="order_details"),
+    path("invoice/<int:order_id>/", views.download_invoice, name="download_invoice"),
+    path("cancel-order/<int:order_id>/", views.cancel_order, name="cancel_order"),
 ]

@@ -220,7 +220,7 @@ def checkout(request):
             errors["lastname"] = "Last name is required"
         if not email:
             errors["email"] = "email is required"
-        elif "@" and "." not in email:
+        elif "@" not in email or "." not in email:
             errors["email"] = "Invalid email."
         if not phone:
             errors["phone"] = "phone is required"
@@ -268,7 +268,7 @@ def checkout(request):
             city = city,
             state = state,
             pincode = pincode,
-            total_amount = 0,
+            total_amount = total_price,
             payment_method=payment_method,
         )
 
@@ -278,14 +278,12 @@ def checkout(request):
                 order = order,
                 product = product,
                 quantity = product.quantity,
-                selling_price = product.selling_price
+                selling_price = product.selling_price,
+                mrp = product.mrp
             )
 
             product.stock -= product.quantity
             product.save()
-
-        order.total_amount = total_price
-        order.save()
 
         request.session["cart"] = {}
         request.session["last_order_id"] = order.order_id
@@ -326,8 +324,8 @@ def order_details(request, order_id):
     if last_order_id != order_id:
         return redirect("shopHome")
         
-    order = get_object_or_404(Order, order_id = order_id)
-    order_items = OrderItem.objects.filter(order = order)
+    order = get_object_or_404(Order, order_id = order_id, user=request.user)
+    order_items = order.items.all()
 
     context = {
        "order": order,

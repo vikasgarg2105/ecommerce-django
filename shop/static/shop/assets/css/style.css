@@ -1088,7 +1088,7 @@ table tbody tr td {
 
 .order-model .user-address,
 .order-model .order-model-body {
-    padding: 20px 20px 0px 20px;
+    padding: 20px 20px 20px 20px;
     max-height: 400px;
     overflow-y: auto;
     height: 100%;
@@ -1191,6 +1191,8 @@ table tbody tr td {
     text-decoration: none;
     border: 1px solid #41bf74;
     font-size: 14px;
+    width: max-content;
+    margin-bottom: 0px;
 }
 
 @media(max-width:768px) {

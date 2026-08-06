@@ -5,6 +5,9 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from .models import User
 from shop.models import Order
 from django.contrib.auth.decorators import login_required
+from django.template.loader import get_template
+from django.http import HttpResponse
+from xhtml2pdf import pisa
 import re
 
 # Create your views here.
@@ -158,7 +161,7 @@ def change_password(request):
 
 @login_required
 def my_orders(request):
-    all_orders = Order.objects.filter(user = request.user).prefetch_related("orderitem_set__product").order_by("-created_at")
+    all_orders = Order.objects.filter(user = request.user).prefetch_related("items__product").order_by("-created_at")
 
     context = {
         "all_orders": all_orders,
@@ -172,11 +175,43 @@ def my_orders(request):
     return render(request, "accounts/my-orders.html", context)
 
 @login_required
+def download_invoice(request, order_id):
+    order = get_object_or_404(Order, order_id = order_id, user=request.user)
+    template = get_template("accounts/invoice.html")
+
+    html = template.render({"order": order})
+    response = HttpResponse(
+        content_type = "application/pdf"
+    )
+
+    response["Content-Disposition"] = (
+        f'attachment; filename="invoice_{order_id}.pdf"'
+    )
+
+    pisa.CreatePDF(html, dest=response)
+
+    return response
+
+@login_required
 def order_details(request, order_id):
-    order = get_object_or_404(Order.objects.prefetch_related("orderitem_set__product"), order_id=order_id, user=request.user)
+    order = get_object_or_404(Order.objects.prefetch_related("items__product"), order_id=order_id, user=request.user)
 
     context = {
         "order": order
     }
 
     return render(request, "accounts/order-details.html", context)
+
+@login_required
+def cancel_order(request, order_id):
+    order = Order.objects.get(order_id = order_id, user = request.user)
+
+    if order.order_status == "Pending":
+        order.order_status = "Cancelled"
+        order.save()
+
+        for item in order.items.all():
+            item.product.stock += item.quantity
+            item.product.save()
+
+        return redirect("my_orders")
